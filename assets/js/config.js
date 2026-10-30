@@ -25,5 +25,5 @@ window.SITE = {
   youtube: "",
 
   // Public URL of the site (used for canonical + share links). Update after you buy a domain.
-  siteUrl: "https://shravanmulge.github.io/thetemplewedding/"
+  siteUrl: "https://thetemplewedding.com/"
 };
