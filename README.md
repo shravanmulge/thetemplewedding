@@ -1,6 +1,6 @@
 # The Temple Wedding
 
-Website for a wedding planner who arranges traditional Hindu weddings at living temples (Sri Virupaksha Temple, Hampi; Bhoga Nandeeshwara Temple, Nandi Hills; and others), end to end: temple permissions, purohits and the full ritual sequence, stay, travel, food, makeup, décor, photography and guest care.
+Website for a wedding planner who arranges traditional Hindu weddings at living temples (Sri Virupaksha Temple, Hampi; Bhoga Nandeeshwara Temple, Nandi Hills; Melukote, Guruvayur, Madurai, Kukke Subramanya and any family kula devata shrine), end to end: temple permissions, purohits and the full ritual sequence, stay, travel, food, makeup, décor and guest care.
 
 Plain HTML, CSS and JavaScript. No build step, no framework, no backend. It can be hosted on GitHub Pages, Netlify, Vercel, Cloudflare Pages or any static host.
 
@@ -8,52 +8,60 @@ Plain HTML, CSS and JavaScript. No build step, no framework, no backend. It can 
 
 | File | Purpose |
 |---|---|
-| `index.html` | Home: positioning, what's included, flagship temples, process summary, FAQ |
-| `temples.html` | Temple directory with details for Virupaksha and Bhoga Nandeeshwara, plus other temples |
-| `services.html` | Everything the planner handles, by category |
-| `process.html` | The booking and discussion-round process, step by step |
-| `book.html` | Consultation enquiry form (WhatsApp / email / optional form endpoint) |
+| `index.html` | Home: hero, four pillars, conviction band, six service cards, two flagship temples, four-step process, beliefs + quote, FAQ, enquiry form |
+| `temples.html` | Temple directory with filter tabs (flagship / Shaivite / Vaishnavite / kula devata), seven temple rows, kula devata band, how permissions work, feasibility-check form |
+| `services.html` | "What We Handle": stat cards, interactive coverage configurator, six pillars with features, integrity guarantee band, custom scope form |
+| `process.html` | "How It Works": four-phase chronicle, planner quote, NRI planning section with case card, FAQ, CTA band |
+| `book.html` | Three-step consultation wizard (sanctum & muhurta → sampradaya → guests & contact) with urgent-contact panel, pact, temple preview and mini FAQ |
+| `policies.html` | Privacy, ritual terms and temple protocols (linked from the footer) |
 | `404.html` | Not-found page (GitHub Pages serves it automatically) |
 
 ## Before going live: edit `assets/js/config.js`
 
-Every page reads its contact details from one file. Open `assets/js/config.js` and set:
+Every page reads contact details from one file. Set:
 
-- `plannerName`: the planner's name (shown in the quote on the home page)
-- `phoneDisplay`: the phone number as you want it printed
-- `phoneE164`: the same number, digits only with country code, e.g. `919812345678`. This drives the `tel:` and WhatsApp links.
-- `email`
-- `city`
-- `formEndpoint` (optional): paste a Formspree/Basin/Getform URL and the booking form will POST to it. Leave empty and the form opens WhatsApp (or email) with the enquiry pre-filled, which needs no backend at all.
-- `instagram`, `youtube` (optional): leave empty to hide the links
+- `plannerName`, `phoneDisplay`, `phoneE164` (digits only, country code first; drives `tel:` and WhatsApp links), `email`, `city`, `addressLines`
+- `formEndpoint` (optional): a Formspree/Basin/Getform URL. Leave empty and every form opens WhatsApp (or email) with the enquiry pre-filled, which needs no backend
+- `instagram`, `youtube` (optional)
 - `siteUrl`: update after you connect a custom domain
 
-Also update the `<link rel="canonical">` and `og:` tags at the top of each HTML file once you have a domain (search for `shravanmulge.github.io`).
+Also update the `<link rel="canonical">` and `og:` tags at the top of each HTML file once you have a domain (search for `shravanmulge.github.io`), and `robots.txt` / `sitemap.xml`.
+
+The address and phone number currently in `config.js` are placeholders in the shape of the design mockup, not real details.
+
+## Content to replace before launch
+
+- **Testimonial** in `process.html` (the "Case in point" card) is a labelled sample. Replace it with a real quote and the couple's permission, or remove the card.
+- **Photos.** Only Virupaksha (Hampi) and Bhoga Nandeeshwara have real photographs (Wikimedia Commons, CC BY-SA 4.0, credited in the footer). Every other image slot is a styled placeholder (`<span class="ph">`) or an illustration (`assets/img/art-*.svg`). Drop in the planner's own photographs from past weddings by replacing the `<img src>` or the `.ph` span.
+- **Temple facts.** Distances, seasons and where ceremonies are held were written from general knowledge. The planner should verify each against current temple practice, especially permission conditions, which change.
+- **Numbers.** The design mockup carried claims like "140+ weddings"; these were left out. Add real figures if you have them.
+
+## How the JavaScript works
+
+- `assets/js/config.js`: site-wide settings (above).
+- `assets/js/icons.js`: inline SVG icon set. Use `<i data-icon="name"></i>` anywhere.
+- `assets/js/main.js`: injects config values (`data-site`, `data-href`), mobile nav, temple filter tabs (`data-filter` / `data-tags`), services configurator (`.cfg-tile`), the booking wizard (`.wizard`), and a generic enquiry handler for any `<form data-enquiry="...">` (endpoint → WhatsApp → email fallback). Temple pages link to `book.html?temple=...` which pre-selects the temple.
 
 ## Hosting on GitHub Pages
 
 `.github/workflows/deploy.yml` deploys the repository root to GitHub Pages on every push to `main` (and to `claude/**` branches while the site is being built).
 
-First-time setup, once:
+One-time setup (the Actions token cannot create the Pages site itself):
 
-1. In the GitHub repo go to **Settings → Pages**.
-2. Under **Build and deployment → Source**, choose **GitHub Actions**.
+1. Repo **Settings → Pages**.
+2. **Build and deployment → Source**: choose **GitHub Actions**.
 3. Re-run the "Deploy site to GitHub Pages" workflow from the **Actions** tab (or push any commit).
-
-The workflow also tries to enable Pages by itself (`enablement: true`), so step 2 may already be done when you look.
 
 The site is then served at `https://<username>.github.io/thetemplewedding/`.
 
 ### Custom domain
 
 1. Buy the domain (`thetemplewedding.com` and `thetemplewedding.in` were both available when this site was built).
-2. Add a file named `CNAME` at the repository root containing only the domain, e.g. `thetemplewedding.com`.
-3. At your registrar, add DNS records per GitHub's guide: https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site
+2. Add a file named `CNAME` at the repository root containing only the domain.
+3. Add DNS records per GitHub's guide: https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site
 4. In **Settings → Pages**, enter the custom domain and tick **Enforce HTTPS** once the certificate is issued.
 
 ## Running locally
-
-Any static server works:
 
 ```bash
 python3 -m http.server 8080
@@ -61,12 +69,11 @@ python3 -m http.server 8080
 
 Then open http://localhost:8080.
 
-## Images
+## Image credits
 
-- `assets/img/bhoga-nandeeshwara-kalyani.jpg`: cropped from ["Kalyani (Pushkarni) - Bhoga Nandeeshwara Temple"](https://commons.wikimedia.org/wiki/File:Kalyani_(Pushkarni)_-_Bhoga_Nandeeshwara_Temple.jpg) by Bikashrd, licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
-- `assets/img/virupaksha-gopuram.jpg`, `virupaksha-card.jpg`, `og-image.jpg`: derived from ["Virupaksha - Gopuram"](https://commons.wikimedia.org/wiki/File:Virupaksha_-_Gopuram.jpg) by Ingo Mehling, licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The attribution in the site footer must stay if you keep the photo. Replace it with your own photographs when you have them and you can drop the credit.
-- `assets/img/art-*.svg`: original illustrations used as placeholders for temples without a photo. Replace with real photos of each temple (ideally your own, from past weddings) by editing the `<img src>` in `temples.html` and `index.html`.
+- `virupaksha-*.jpg`, `thumb-virupaksha.jpg`, `og-image.jpg`: derived from ["Virupaksha - Gopuram"](https://commons.wikimedia.org/wiki/File:Virupaksha_-_Gopuram.jpg) by Ingo Mehling, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- `bhoga-nandeeshwara-kalyani.jpg`, `thumb-bhoga.jpg`: from ["Kalyani (Pushkarni) - Bhoga Nandeeshwara Temple"](https://commons.wikimedia.org/wiki/File:Kalyani_(Pushkarni)_-_Bhoga_Nandeeshwara_Temple.jpg) by Bikashrd, CC BY-SA 4.0.
+- `bhoga-nandeeshwara-mantapa*.jpg`: from ["Bhoga Nandeeshwara Temple - Vasanta Mantapa"](https://commons.wikimedia.org/wiki/File:Bhoga_Nandeeshwara_Temple_-_Vasanta_Mantapa.jpg) by Bikashrd, CC BY-SA 4.0.
+- `art-*.svg`, `pattern-mandala.svg`, `mandala-line.svg`, `favicon.svg`: original illustrations, no attribution needed.
 
-## Content to verify before launch
-
-The temple descriptions were written from general knowledge. The planner should check, for each temple, that the stated details (distances, seasons, where the ceremony is held) match current practice, and especially the permission conditions, which change. The site already says permissions are confirmed after booking; keep that wording unless you want to make firmer promises.
+Keep the footer credit line while these photographs are in use.
